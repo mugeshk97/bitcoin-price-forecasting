@@ -1,0 +1,31 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - data/raw/Binance_BTCUSDT_minute.csv
+    - src/preprocess.py
+    params:
+    - train_ratio
+    outs:
+    - data/feature/test.csv
+    - data/feature/train.csv
+  train:
+    cmd: python src/train.py
+    deps:
+    - data/feature/test.csv
+    - data/feature/train.csv
+    - src/train.py
+    params:
+    - data.sequence_length
+    - hyp.batch_size
+    - hyp.drpout
+    - hyp.epochs
+    - hyp.lstm_1
+    - hyp.lstm_2
+    outs:
+    - model/model.h5
+    - report/plot.json
+    - scaler/scaler.pkl
+    metrics:
+    - report/score.json:
+        cache: false

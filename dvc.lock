@@ -1,0 +1,54 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/raw/Binance_BTCUSDT_minute.csv
+      md5: d9c1a334f1fcfe068820f16c475dae78
+      size: 45363561
+    - path: src/preprocess.py
+      md5: 7230887b7bdef903e3062a473c3cca43
+      size: 1508
+    params:
+      params.yaml:
+        train_ratio: 0.94
+    outs:
+    - path: data/feature/test.csv
+      md5: e1538f410d6c7e5e3d0d4c868725e94a
+      size: 1671720
+    - path: data/feature/train.csv
+      md5: 144f39b8c87d906b4e4337a00389c09d
+      size: 26172997
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/feature/test.csv
+      md5: e1538f410d6c7e5e3d0d4c868725e94a
+      size: 1671720
+    - path: data/feature/train.csv
+      md5: 144f39b8c87d906b4e4337a00389c09d
+      size: 26172997
+    - path: src/train.py
+      md5: 374cac8a745432262af4177767a637fb
+      size: 1337
+    params:
+      params.yaml:
+        data.sequence_length: 60
+        hyp.batch_size: 512
+        hyp.drpout: 0.2
+        hyp.epochs: 10
+        hyp.lstm_1: 64
+        hyp.lstm_2: 32
+    outs:
+    - path: model/model.h5
+      md5: bf811026924137396b570569994f28b4
+      size: 416848
+    - path: report/plot.json
+      md5: 6c6dc86bf902836a46d04419466f28c9
+      size: 659
+    - path: report/score.json
+      md5: 7ddf1725d218d16701ad4b46b5afb89d
+      size: 41
+    - path: scaler/scaler.pkl
+      md5: 03c5f279902f367e4728aa559b3e9103
+      size: 925
