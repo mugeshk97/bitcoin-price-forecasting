@@ -1,0 +1,11 @@
+train_ratio : 0.94
+
+hyp:
+  lstm_1 : 64
+  lstm_2 : 32
+  drpout : 0.2
+  epochs : 10
+  batch_size : 512
+
+data:
+  sequence_length: 60
